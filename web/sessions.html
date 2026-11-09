@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#16130f">
+  <title>기록 · 라벨링</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section id="list" class="screen active">
+    <header class="top"><h1>기록 · 라벨링</h1><a class="link" href="index.html">← 코치로</a></header>
+    <p class="hint">영상을 보면서 "사람 기준으로 지금이 정답"인 순간을 찍어주세요.
+      그 기준으로 AI 판단이 ±10초 안에 들었는지 채점해요.</p>
+
+    <h2>다른 카메라로 찍은 영상 올리기</h2>
+    <form id="uploadForm">
+      <select id="upRecipe"></select>
+      <input type="file" id="upFile" accept="video/*" style="margin-top:8px">
+      <button class="primary" style="width:100%;margin-top:8px">올리기</button>
+      <p id="upStatus" class="muted"></p>
+    </form>
+
+    <h2>세션</h2>
+    <div id="sessions"><p class="muted">불러오는 중…</p></div>
+  </section>
+
+  <section id="detail" class="screen">
+    <header class="top"><h1 id="dTitle">세션</h1><a class="link" href="#">← 목록</a></header>
+    <p id="dMeta" class="muted"></p>
+    <video id="review" class="review" controls playsinline preload="metadata"></video>
+    <p id="noVideo" class="muted hidden">이 세션에는 영상이 없어요.</p>
+
+    <h2>사람 기준 시각 (초)</h2>
+    <div id="labelRows"></div>
+    <button id="btnSave" class="primary" style="width:100%;margin-top:12px">라벨 저장 & 재채점</button>
+
+    <div id="dReports"></div>
+
+    <h2>AI 리플레이 채점 (프롬프트·모델 바꿔가며 반복 가능)</h2>
+    <p class="hint">맥 터미널에서 실행하세요. 녹화 영상을 라이브와 같은 방식으로 Gemini에 다시 보여주고 판단 시각을 기록해요.</p>
+    <pre class="cmd" id="replayCmd"></pre>
+  </section>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="report.js"></script>
+  <script src="sessions.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#16130f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>AI 요리 코치</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 1. 홈: 레시피·모드 선택 -->
+  <section id="home" class="screen active">
+    <header class="top">
+      <h1>AI 요리 코치 <small>휴대폰 프로토타입</small></h1>
+      <a class="link" href="sessions.html">기록 · 라벨링 →</a>
+    </header>
+    <div id="keyWarn" class="warn hidden">서버에 GEMINI_API_KEY 가 없어요. <code>.env</code> 를 확인하세요.</div>
+
+    <h2>무엇을 만들까요?</h2>
+    <div id="recipeList" class="cards"></div>
+
+    <h2>모드</h2>
+    <div class="modes">
+      <label class="mode"><input type="radio" name="mode" value="coach" checked>
+        <b>🗣️ 코치 모드</b><span>AI가 타이밍을 음성으로 알려줘요</span></label>
+      <label class="mode"><input type="radio" name="mode" value="blind">
+        <b>🧪 정확도 테스트</b><span>AI는 조용히 기록만. 내가 행동할 때 "했어요"를 누르면 AI 판단과 비교해요 (±10초)</span></label>
+    </div>
+    <label class="check"><input type="checkbox" id="optRecord" checked> 영상 녹화해서 서버에 저장 (리플레이 평가·학습 데이터용)</label>
+
+    <button id="btnSetup" class="primary big" disabled>카메라 켜기</button>
+  </section>
+
+  <!-- 2. 카메라 설치 -->
+  <section id="setup" class="screen">
+    <div class="videoWrap">
+      <video id="video" playsinline muted autoplay></video>
+      <div class="guide"><span>팬이 이 안에 들어오게</span></div>
+    </div>
+    <div class="panel">
+      <p class="hint">휴대폰을 거치대에 고정해서 <b>팬 바로 위 40~60cm</b>에서 내려다보게 해주세요.
+        김이 렌즈에 바로 닿지 않게 살짝 비스듬히 두면 좋아요. 화면은 자동으로 꺼지지 않아요.</p>
+      <div class="row">
+        <button id="btnFlip" class="ghost">카메라 전환</button>
+        <button id="btnBack1" class="ghost">뒤로</button>
+      </div>
+      <button id="btnStart" class="primary big">요리 시작</button>
+    </div>
+  </section>
+
+  <!-- 3. 요리 중 -->
+  <section id="cook" class="screen">
+    <div class="videoWrap small">
+      <div id="videoSlot"></div>
+      <div class="badges">
+        <span id="recBadge" class="badge rec hidden">● REC</span>
+        <span id="clock" class="badge">0:00</span>
+        <span id="stepBadge" class="badge">1/5</span>
+      </div>
+    </div>
+    <div class="panel cookPanel">
+      <div id="instruction" class="instruction">…</div>
+      <div id="caption" class="caption"></div>
+
+      <div id="aiBox" class="aiBox">
+        <div class="aiRow"><span class="aiLabel">AI가 보는 것</span><span id="obs">대기 중</span></div>
+        <div class="confBar"><div id="confFill"></div></div>
+        <div class="aiMeta" id="aiMeta"></div>
+      </div>
+      <div id="blindBox" class="aiBox hidden">
+        <div class="aiRow"><span class="aiLabel">🧪 테스트 중</span><span id="blindInfo">AI가 조용히 기록 중</span></div>
+      </div>
+
+      <button id="btnLabel" class="labelBtn hidden">✋ 지금 <b id="labelName">…</b> 했어요</button>
+
+      <div class="row controls">
+        <button id="btnPrev" class="ghost">◀ 이전</button>
+        <button id="btnRepeat" class="ghost">🔁 다시</button>
+        <button id="btnNext" class="ghost">다음 ▶</button>
+      </div>
+      <div class="row controls">
+        <button id="btnAsk" class="secondary">🎤 질문하기</button>
+        <label class="toggle"><input type="checkbox" id="optHandsfree"> 계속 듣기</label>
+      </div>
+      <button id="btnFinish" class="danger">요리 끝내기</button>
+    </div>
+  </section>
+
+  <!-- 4. 결과 -->
+  <section id="result" class="screen">
+    <header class="top"><h1>결과</h1></header>
+    <div id="uploadBox" class="panel hidden">
+      <p>영상 업로드 중… <span id="uploadPct">0%</span></p>
+      <div class="confBar"><div id="uploadFill"></div></div>
+    </div>
+    <div id="reportBox"></div>
+    <div class="row">
+      <button id="btnHome" class="primary">처음으로</button>
+      <a id="linkSession" class="button ghost" href="sessions.html">라벨 고치기 →</a>
+    </div>
+  </section>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="report.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
